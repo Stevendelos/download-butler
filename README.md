@@ -48,3 +48,7 @@ PDF, DOCX, MP3, MP4, EXE, ZIP, PNG, JPG, TXT, CSV, PPTX, JSON, XML, MD, SVG, and
 ### After Organizing
 ![Organized Downloads](img/move.png)
 
+## Features to be Added:
+ - Duplicate file cleaner
+ - Intelligent categorization based on file content
+
