@@ -1,1 +1,29 @@
-
+{
+    "DownloadsPath": "auto",
+    "rules": {
+        "pdf": "PDFs",
+        "docx": "Documents",
+        "xlsx": "Documents",
+        "mp3": "Music",
+        "mp4": "Videos",
+        "jpg": "Images",
+        "png": "Images",
+        "exe": "Installers",
+        "zip": "Archives",
+        "rar": "Archives",
+        "txt": "TextFiles",
+        "csv": "Documents",
+        "pptx": "Presentations",
+        "html": "WebFiles",
+        "json": "DataFiles",
+        "xml": "DataFiles",
+        "gif": "Images",
+        "md": "MarkdownFiles",
+        "torrent": "Torrents",
+        "apk": "Apps",
+        "iso": "ISOs",
+        "dmg": "DiskImages",
+        "psd": "DesignFiles",
+        "svg": "Images"
+    }
+}
