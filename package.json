@@ -1,1 +1,55 @@
-
+{
+    "name": "download-butler",
+    "version": "1.1.0",
+    "description": "A tool to organize your Downloads folder - Made for You",
+    "main": "main.js",
+    "homepage": ".",
+    "scripts": {
+        "start": "electron .",
+        "build": "electron-builder",
+        "build-win": "electron-builder --win",
+        "dist": "electron-builder --publish=never"
+    },
+    "build": {
+        "appId": "com.tiyiso.download-butler",
+        "productName": "Download Butler",
+        "directories": {
+        "output": "dist"
+        },
+        "files": [
+        "main.js",
+        "preload.js",
+        "index.html",
+        "config.json",
+        "package.json"
+        ],
+        "win": {
+        "target": [
+            {
+            "target": "nsis",
+            "arch": [
+                "x64"
+            ]
+            }
+        ],
+        "icon": "icon.ico",
+        "verifyUpdateCodeSignature": false
+        },
+        "nsis": {
+        "oneClick": false,
+        "allowToChangeInstallationDirectory": true,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "shortcutName": "Download Butler"
+        },
+        "portable": {
+        "artifactName": "DownloadButler-Portable-${version}.exe"
+        }
+    },
+    "author": "Tiyiso Hlungwani",
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^36.4.0",
+        "electron-builder": "^26.0.12"
+    }
+}
