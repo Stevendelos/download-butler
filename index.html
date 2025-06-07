@@ -1,1 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download Butler</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00d4ff;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+            opacity: 0.6;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 25px;
+            padding: 2px;
+            background: linear-gradient(45deg, #00d4ff, #7209b7, #ff006e);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        h1 {
+            background: linear-gradient(45deg, #00d4ff, #7209b7, #ff006e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .folder-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 18px 35px;
+            font-size: 16px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(45deg, #00d4ff, #7209b7);
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            min-width: 220px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        button:hover:not(:disabled)::before {
+            left: 100%;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.4);
+            background: linear-gradient(45deg, #00a8cc, #5a0791);
+        }
+        
+        button:disabled {
+            background: linear-gradient(45deg, #333, #555);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            opacity: 0.5;
+        }
+        
+        #select-folder {
+            background: linear-gradient(45deg, #ff006e, #7209b7);
+        }
+        
+        #select-folder:hover:not(:disabled) {
+            background: linear-gradient(45deg, #cc0055, #5a0791);
+            box-shadow: 0 15px 30px rgba(255, 0, 110, 0.4);
+        }
+        
+        #selected-path {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            padding: 15px 25px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-top: 15px;
+            max-width: 500px;
+            word-break: break-all;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        #status {
+            margin-top: 30px;
+            font-weight: 600;
+            color: #00d4ff;
+            font-size: 1.2em;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+        
+        #output {
+            text-align: left;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+        }
+        
+        #output li {
+            margin: 12px 0;
+            padding: 10px 15px;
+            border-left: 3px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        #output li:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff, 0 0 15px #00d4ff;
+            }
+            to {
+                text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            button {
+                min-width: 180px;
+                padding: 15px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+    
+    <div class="container">
+        <h1><span class="icon glow">⚡</span> Download Butler <span class="icon glow">🤖</span></h1>
+        <p class="subtitle">Intelligent file organization at your fingertips</p>
+        
+        <div class="button-container">
+            <div class="folder-section">
+                <button id="select-folder"> Select Target Folder</button>
+                <div id="selected-path">No folder selected</div>
+            </div>
+            
+            <button id="runBtn" disabled>Execute Butler</button>
+        </div>
+        
+        <ul id="output"></ul>
+        <p id="status"></p>
+    </div>
 
+    <script>
+        function createParticles() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                bgAnimation.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        let selectedFolder = null;
+
+        document.getElementById('select-folder').addEventListener('click', async () => {
+            selectedFolder = await window.butlerAPI.selectFolder();
+            document.getElementById('selected-path').textContent = selectedFolder || 'No folder selected';
+            
+            if (selectedFolder) {
+                document.getElementById('runBtn').disabled = false;
+                document.getElementById('status').textContent = '⚡ System ready for execution!';
+            } else {
+                document.getElementById('runBtn').disabled = true;
+                document.getElementById('status').textContent = '';
+            }
+        });
+
+        document.getElementById('runBtn').addEventListener('click', async () => {
+            if (!selectedFolder) {
+                alert('Please select a folder first.');
+                return;
+            }
+
+            const output = document.getElementById('output');
+            const status = document.getElementById('status');
+            
+            status.textContent = '🤖 Butler executing optimization protocols...';
+            output.innerHTML = '';
+
+            const result = await window.butlerAPI.runButler(selectedFolder);
+            const outputList = document.getElementById('output');
+            outputList.innerHTML = '';
+            result.forEach(line => {
+                const li = document.createElement('li');
+                li.textContent = line;
+                outputList.appendChild(li);
+            });
+            
+            status.textContent = 'Mission accomplished! Files successfully organized.';
+        });
+    </script>
+</body>
+</html>
