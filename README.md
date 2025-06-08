@@ -8,11 +8,15 @@ Downloads Butler is a smart, cross-platform desktop app that automatically organ
 
 ## Features
 
-- Automatically organizes your Downloads folder into categorized subfolders
+- Automatically organizes your Folder into categorized subfolders
 - File type rules configurable via `config.json`
 - Clean, minimal UI with one-click operation
 - Supports **Windows**, **Linux**, and **WSL environments**
+- **Smart Sorting Logic**: Prevents false duplicates by sorting longer filenames first (e.g., avoids "file" being moved before "file (copy)")
+- **Duplicate File Cleaner**: Detects and skips moving duplicate files (e.g., avoids file.pdf vs file (1).pdf clashes)
 - Built using **Electron**, **Node.js**, and the **File System API**
+- Cross-Platform Support: Works on Windows, Linux, and WSL environments
+- **Wide Extension Support**: Comes preloaded with rules for 30+ file extensions
 - Supports dozens of file extensions out-of-the-box
 - Works offline — no internet required
 
