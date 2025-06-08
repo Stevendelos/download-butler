@@ -44,6 +44,8 @@ PDF, DOCX, MP3, MP4, EXE, ZIP, PNG, JPG, TXT, CSV, PPTX, JSON, XML, MD, SVG, and
  npm install
  npm run build-win
 ```
+After running the build command, your Windows installer (.exe) will be generated in the `dist/` folder.
+Simply double-click the .exe file to install Downloads Butler on your system.
 
 ## Screenshots
 ### Main UI
