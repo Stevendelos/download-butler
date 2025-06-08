@@ -55,6 +55,5 @@ Simply double-click the .exe file to install Downloads Butler on your system.
 ![Organized Downloads](img/move.png)
 
 ## Features to be Added:
- - Duplicate file cleaner
  - Intelligent categorization based on file content
 
