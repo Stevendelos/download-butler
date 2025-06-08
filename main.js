@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const configPath = path.join(__dirname, 'config.json');
 
@@ -17,8 +18,45 @@ function moveFileCategory(file, downloadsDir, targetFolder) {
     const destDir = path.join(downloadsDir, targetFolder);
     ensureDirExists(destDir);
     const dest = path.join(destDir, file);
-    fs.renameSync(src, dest);
-    return `Moved: ${file} -> ${targetFolder}/`;
+    const { name, ext } = path.parse(file);
+
+    let counter = 1;
+    while (fs.existsSync(dest)) {
+        const newName = `${name} (${counter})${ext}`;
+        dest = path.join(destDir, newName);
+        counter++;
+    }
+
+    try {
+        fs.renameSync(src, dest);
+        return `Moved: ${file} -> ${targetFolder}/`;
+    } catch (err) {
+        return `⚠️ Failed to move "${file}": ${err.message}`;
+    }
+}
+
+function hashFile(filePath) {
+    const fileBuffer = fs.readFileSync(filePath);
+    return crypto.createHash('md5').update(fileBuffer).digest('hex');
+}
+
+function handleDuplicates(files, dirPath, logs) {
+    const hashMap = new Map();
+    const duplicatesDir = path.join(dirPath, 'Duplicates');
+    ensureDirExists(duplicatesDir);
+
+    files.forEach(file => {
+        const fullPath = path.join(dirPath, file);
+        const hash = hashFile(fullPath);
+
+        if (hashMap.has(hash)) {
+            const dest = path.join(duplicatesDir, file);
+            fs.renameSync(fullPath, dest);
+            logs.push(`Duplicate moved: ${file} -> Duplicates/`);
+        } else {
+            hashMap.set(hash, file);
+        }
+    });
 }
 
 function runButler(downloadsDir) {
@@ -26,10 +64,14 @@ function runButler(downloadsDir) {
     const rules = config.rules;
     const logs = [];
 
-const files = fs.readdirSync(downloadsDir).filter(f => {
-    const fullPath = path.join(downloadsDir, f);
-    return fs.statSync(fullPath).isFile();
-});
+const files = fs.readdirSync(downloadsDir)
+        .filter(f => {
+            const fullPath = path.join(downloadsDir, f);
+            return fs.statSync(fullPath).isFile();
+        })
+        .sort((a, b) => b.length - a.length);
+
+handleDuplicates(files, downloadsDir, logs);
 
 files.forEach(file => {
     const ext = getExtension(file);
