@@ -9,8 +9,13 @@
         "jpg": "Images",
         "png": "Images",
         "exe": "Installers",
+        "msi": "Installers",
+        "jpeg": "Images",
         "zip": "Archives",
         "rar": "Archives",
+        "7z": "Archives",
+        "tar": "Archives",
+        "gz": "Archives",
         "txt": "TextFiles",
         "csv": "Documents",
         "pptx": "Presentations",
@@ -24,6 +29,11 @@
         "iso": "ISOs",
         "dmg": "DiskImages",
         "psd": "DesignFiles",
-        "svg": "Images"
+        "svg": "Images",
+        "php": "WebFiles",
+        "js": "CodeFiles",
+        "css": "CodeFiles",
+        "r": "RFiles",
+        "log": "Logs"
     }
 }
