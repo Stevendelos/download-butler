@@ -1,6 +1,4 @@
-# Downloads Butler
-
-**“Your silent assistant that keeps your Folder tidy.”**
+# Downloads Butler - **Your silent assistant that keeps your Folder tidy.**
 
 Downloads Butler is a smart, cross-platform desktop app that automatically organizes your messy Downloads folder by file type. Built with **Electron** and Node.js, it’s lightweight, fast, and fully customizable.
 
