@@ -31,7 +31,7 @@ function moveFileCategory(file, downloadsDir, targetFolder) {
         fs.renameSync(src, dest);
         return `Moved: ${file} -> ${targetFolder}/`;
     } catch (err) {
-        return `⚠️ Failed to move "${file}": ${err.message}`;
+        return `Failed to move "${file}": ${err.message}`;
     }
 }
 
